@@ -1,9 +1,9 @@
-import { useState, createContext } from "react";
+import { useState } from "react";
 import Header from "./components/Header";
 import Shop from "./components/Shop";
 import { DUMMY_PRODUCTS } from "./dummy-products.js";
-
-const productContext = createContext();
+import Product from "./components/Product";
+import { ShopContext } from "./store/shop-context.jsx";
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState({
@@ -66,18 +66,26 @@ function App() {
     });
   }
 
+  const ctxValue = {
+    items: shoppingCart.items,
+    addItemsAddToCart: handleAddItemToCart,
+  };
+
   return (
-    <>
+    <ShopContext value={ctxValue}>
       <Header
         cart={shoppingCart}
         onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
       />
-      <productContext.Provider value={{ handleAddItemToCart }}>
-        <Shop />
-      </productContext.Provider>
-    </>
+      <Shop>
+        {DUMMY_PRODUCTS.map((product) => (
+          <li key={product.id}>
+            <Product {...product} onAddCart={handleAddItemToCart} />
+          </li>
+        ))}
+      </Shop>
+    </ShopContext>
   );
 }
 
 export default App;
-export { productContext };

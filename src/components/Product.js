@@ -1,8 +1,9 @@
-import { productContext } from "../App";
-import { useContext } from "react";
+import { use } from "react";
+import { ShopContext } from "../store/shop-context";
 
 export default function Product({ id, image, title, price, description }) {
-  const product = useContext(productContext);
+  const { addItemsAddToCart } = use(ShopContext);
+
   return (
     <article className="product">
       <img src={image} alt={title} />
@@ -13,9 +14,7 @@ export default function Product({ id, image, title, price, description }) {
           <p>{description}</p>
         </div>
         <p className="product-actions">
-          <button onClick={() => product.handleAddItemToCart(id)}>
-            Add to Cart
-          </button>
+          <button onClick={() => addItemsAddToCart(id)}>Add to Cart</button>
         </p>
       </div>
     </article>
